@@ -1,12 +1,12 @@
-import React from 'react';
-
-export default function Button({ text, disabled }) {
+// In @/app/_components/Button.js
+export default function Button({ text, disabled, onClick }) {
     return (
-        <button 
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={disabled}
-        >
-            {text}
-        </button>
+      <button
+        className={`px-4 py-2 bg-blue-500 text-white rounded ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'}`}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {text}
+      </button>
     );
-}
+  }
