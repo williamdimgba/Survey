@@ -110,8 +110,8 @@ export default function DemographicForm({ onNext }) {
             <option value="some_college">Some college credit, no degree</option>
             <option value="trade_school">Trade/technical/vocational training</option>
             <option value="associate">Associate degree</option>
-            <option value="bachelor">Bachelor's degree</option>
-            <option value="master">Master's degree</option>
+            <option value="bachelor">Bachelor&apos;s degree</option>
+            <option value="master">Master&apos;s degree</option>
             <option value="professional">Professional degree</option>
             <option value="doctorate">Doctorate degree</option>
           </select>
