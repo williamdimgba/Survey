@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/app/_components/Button";
+import DemographicForm from "@/app/_components/DemographicForm";
+import FavoriteDrinkForm from "@/app/_components/FavoriteDrinkForm";
+import  IntroductionStep  from "@/app/_components/IntroductionStep";
+import  InformationStep  from "@/app/_components/InformationStep";
 
 export default function Home() {
-  const [currentStep, setCurrentStep] = useState(1); // State to control which step to display
-  const [agreementChecked, setAgreementChecked] = useState(false); // State to control agreement checkbox
+  const [currentStep, setCurrentStep] = useState(1);
+  const [agreementChecked, setAgreementChecked] = useState(false);
+  const [surveyData, setSurveyData] = useState({});
 
   const introTexts = [
     `Hello, and welcome! You are invited to participate in this focus group/survey of an Aronia berry-based drink. We are interested in finding out your points of view on the taste and quality of our drink. Additionally, we want to show you the difference between other power drinks on the market and our line of products, and educate you about the potential benefits of using our new drinks.`,
@@ -29,8 +33,23 @@ export default function Home() {
     "And finally, putting the health benefits front and center for our label"
   ];
 
-  const handleNext = () => {
-    setCurrentStep(currentStep + 1);
+  const handleNext = (data) => {
+    setCurrentStep(prevStep => prevStep + 1);
+    if (data) {
+      setSurveyData(prevData => ({ ...prevData, ...data }));
+    }
+    window.scrollTo(0, 0);
+  };
+
+  const handleSubmit = (data) => {
+    const finalData = { ...surveyData, ...data };
+    console.log('Final survey data:', finalData);
+    // Here you would typically send all the collected data to your backend or Supabase
+    alert('Survey submitted successfully!');
+    // Reset the form
+    setCurrentStep(1);
+    setSurveyData({});
+    setAgreementChecked(false);
   };
 
   return (
@@ -40,89 +59,22 @@ export default function Home() {
           texts={introTexts} 
           agreementChecked={agreementChecked} 
           setAgreementChecked={setAgreementChecked}
-          onNext={handleNext}
+          onNext={() => handleNext()}
         />
       )}
       {currentStep === 2 && (
         <InformationStep 
           texts={infoTexts} 
           benefitsList={benefitsList}
-          onNext={handleNext}
+          onNext={() => handleNext()}
         />
       )}
       {currentStep === 3 && (
-        <SamplingStep />
+        <DemographicForm onNext={handleNext} />
       )}
-    </div>
-  );
-}
-
-function IntroductionStep({ texts, agreementChecked, setAgreementChecked, onNext }) {
-  return (
-    <div>
-      <TextSection texts={texts} />
-      <div className="flex items-start mb-6">
-        <input
-          type="checkbox"
-          checked={agreementChecked}
-          onChange={(e) => setAgreementChecked(e.target.checked)}
-          className="mt-1 mr-2"
-        />
-        <p>
-          By clicking OK (or signing the paper form) below, you indicate that you have read and understand the previous information and consent to participate and have your data included in our research.
-        </p>
-      </div>
-      <div className="flex justify-end">
-        <Button text="Next" disabled={!agreementChecked} onClick={onNext} />
-      </div>
-    </div>
-  );
-}
-
-function InformationStep({ texts, benefitsList, onNext }) {
-  return (
-    <div>
-      <p className="text-center mb-4">
-        Thank you in advance for your participation in this study and for supporting science at UMES.
-      </p>
-      <h2 className="text-center font-bold mb-4">
-        I. Drink Information and Background
-      </h2>
-      <p className="mb-4">Are you familiar with any of the following health drinks? – please, check all that apply:</p>
-      <TextSection texts={texts} />
-      <ul className="list-disc list-inside mb-6">
-        {benefitsList.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-      <div className="flex justify-end">
-        <Button text="Next" onClick={onNext} />
-      </div>
-    </div>
-  );
-}
-
-function SamplingStep() {
-  return (
-    <div>
-      <p className="font-bold text-center mb-4">
-        Please take this time to sample our drinks and continue with the survey. Once you are done with tasting 3-6 drinks and reading their labels, please click OK or continue your paper survey.
-      </p>
-      <div className="flex justify-end">
-        <Button text="Finish" />
-      </div>
-    </div>
-  );
-}
-
-function TextSection({ texts }) {
-  return (
-    <div>
-      {texts.map((text, index) => (
-        <p key={index} className="mb-4">
-          {text}
-        </p>
-      ))}
+      {currentStep === 4 && (
+        <FavoriteDrinkForm onSubmit={handleSubmit} />
+      )}
     </div>
   );
 }
