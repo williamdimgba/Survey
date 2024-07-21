@@ -13,7 +13,7 @@ export default function IntroductionStep({ texts, agreementChecked, setAgreement
           onChange={(e) => setAgreementChecked(e.target.checked)}
           className="mt-1 mr-2"
         />
-        <p>
+        <p className="font-bold">
           By clicking OK (or signing the paper form) below, you indicate that you have read and understand the previous information and consent to participate and have your data included in our research.
         </p>
       </div>
