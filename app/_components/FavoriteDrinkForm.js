@@ -73,8 +73,7 @@ export default function FavoriteDrinkForm({ onSubmit }) {
           </select>
           {errors.favoriteDrink && <p className="text-red-500">{errors.favoriteDrink}</p>}
         </div>
-        /**
-         */
+
         <RatingQuestion
           label="How would you rate the overall taste of your preferred drink?"
           name="overallTaste"
