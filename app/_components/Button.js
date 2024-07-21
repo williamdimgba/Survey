@@ -1,4 +1,4 @@
-// In @/app/_components/Button.js
+"use client";
 export default function Button({ text, disabled, onClick }) {
     return (
       <button
