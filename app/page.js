@@ -41,6 +41,14 @@ export default function Home() {
     window.scrollTo(0, 0);
   };
 
+  const handlePrev = (data) => {
+    setCurrentStep(prevStep => prevStep - 1);
+    if(data) {
+      setSurveyData(prevData => ({ ...prevData, ...data }));
+    }
+    window.scrollTo(0, 0);
+  }
+
   const handleSubmit = (data) => {
     const finalData = { ...surveyData, ...data };
     console.log('Final survey data:', finalData);
@@ -50,6 +58,7 @@ export default function Home() {
     setCurrentStep(1);
     setSurveyData({});
     setAgreementChecked(false);
+    console.log(surveyData)
   };
 
   return (

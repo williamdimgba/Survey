@@ -142,7 +142,8 @@ export default function DemographicForm({ onNext }) {
           )}
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <Button text="Previous" />
           <Button text="Next" onClick={handleSubmit} />
         </div>
       </form>
