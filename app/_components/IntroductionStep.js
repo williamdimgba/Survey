@@ -1,10 +1,57 @@
 import React from 'react';
 import Button from "@/app/_components/Button";
 import TextSection from './TextSection';
+import Image from 'next/image';
+import Image1 from "@/app/_images/USDA logo.jpeg";
+import Image2 from "@/app/_images/UMES logo.png";
+import Image3 from "@/app/_images/jookender.png";
+import Image4 from "@/app/_images/Ameg.png";
 
 export default function IntroductionStep({ texts, agreementChecked, setAgreementChecked, onNext }) {
   return (
     <div>
+      <div className="flex flex-wrap gap-4 justify-center mb-4">
+        <div className="w-1/2 sm:w-1/4">
+          <Image 
+            src={Image1}
+            alt="USDA LOGO"
+            quality={80}
+            width={200}
+            height={80}
+            className="object-contain"
+          />
+        </div>
+        <div className="w-1/2 sm:w-1/4 md:w-1/5 lg:w-1/6">
+          <Image 
+            src={Image2}
+            alt="UMES LOGO"
+            quality={80}
+            width={200}
+            height={80}
+            className="object-contain"
+          />
+        </div>
+        <div className="w-1/2 sm:w-1/4 md:w-1/5 lg:w-1/6">
+          <Image 
+            src={Image3}
+            alt="Jookender Logo"
+            quality={80}
+            width={200}
+            height={80}
+            className="object-contain"
+          />
+        </div>
+        <div className="w-1/2 sm:w-1/4 md:w-1/5 lg:w-1/6">
+          <Image 
+            src={Image4}
+            alt="Ameg LOGO"
+            quality={80}
+            width={200}
+            height={80}
+            className="object-contain"
+          />
+        </div>
+      </div>
       <TextSection texts={texts} />
       <div className="flex items-start mb-6">
         <input

@@ -89,7 +89,8 @@ export default function InformationStep({ texts, benefitsList, onNext }) {
           Please take this time to sample our drinks and continue with the survey. Once you are done with tasting 3-6 drinks and reading their labels, please check the box below and click Next.
         </p>
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <Button text="Previous" onClick={handleSubmit} />
         <Button text="Next" disabled={!samplingCompleted} onClick={handleSubmit} />
       </div>
     </div>
