@@ -1,22 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from "@/app/_components/Button";
 import TextSection from './TextSection';
 
-export default function InformationStep({ texts, benefitsList, onNext }) {
-  const [samplingCompleted, setSamplingCompleted] = useState(false);
-  const [familiarDrinks, setFamiliarDrinks] = useState([]);
-  const [otherDrink, setOtherDrink] = useState('');
-
+export default function InformationStep({ texts, benefitsList, onNext, onPrevious }) {
+  const [state, setState] = useState({
+    samplingCompleted: false,
+    familiarDrinks: [],
+    otherDrink: '',
+  });
+  
   const handleCheckboxChange = (drink) => {
-    setFamiliarDrinks((prev) => 
-      prev.includes(drink) ? prev.filter(d => d !== drink) : [...prev, drink]
-    );
+    setState(prevState => ({
+      ...prevState,
+      familiarDrinks: prevState.familiarDrinks.includes(drink)
+        ? prevState.familiarDrinks.filter(d => d !== drink)
+        : [...prevState.familiarDrinks, drink]
+    }));
   };
 
-  const handleSubmit = () => {
-    if (samplingCompleted) {
-      onNext(); // Proceed to the next step
+  const handleOtherDrinkChange = (e) => {
+    setState(prevState => ({
+      ...prevState,
+      otherDrink: e.target.value
+    }));
+  };
+
+  const handleSamplingCompletedChange = (e) => {
+    setState(prevState => ({
+      ...prevState,
+      samplingCompleted: e.target.checked
+    }));
+  };
+
+  const handleNext = () => {
+    if (state.samplingCompleted) {
+      console.log('Final state before submission:', state);
+      onNext(state); // Pass the state to the next step
     }
+  };
+
+  const handlePrevious = () => {
+    onPrevious(state); // Pass the state to the previous step
   };
 
   return (
@@ -43,7 +67,7 @@ export default function InformationStep({ texts, benefitsList, onNext }) {
             <label key={drink} className="flex items-center mb-2">
               <input
                 type="checkbox"
-                checked={familiarDrinks.includes(drink)}
+                checked={state.familiarDrinks.includes(drink)}
                 onChange={() => handleCheckboxChange(drink)}
                 className="mr-2"
               />
@@ -53,15 +77,15 @@ export default function InformationStep({ texts, benefitsList, onNext }) {
           <label className="flex items-center mb-2">
             <input
               type="checkbox"
-              checked={familiarDrinks.includes("Other")}
+              checked={state.familiarDrinks.includes("Other")}
               onChange={() => handleCheckboxChange("Other")}
               className="mr-2"
             />
             Other(s) – please, list:
             <input
               type="text"
-              value={otherDrink}
-              onChange={(e) => setOtherDrink(e.target.value)}
+              value={state.otherDrink}
+              onChange={handleOtherDrinkChange}
               placeholder="Please specify"
               className="ml-2 p-1 border rounded"
             />
@@ -80,8 +104,8 @@ export default function InformationStep({ texts, benefitsList, onNext }) {
         <div>
             <input
               type="checkbox"
-              checked={samplingCompleted}
-              onChange={(e) => setSamplingCompleted(e.target.checked)}
+              checked={state.samplingCompleted}
+              onChange={handleSamplingCompletedChange}
               className="mr-2"
             />
           </div>
@@ -90,8 +114,8 @@ export default function InformationStep({ texts, benefitsList, onNext }) {
         </p>
       </div>
       <div className="flex justify-between">
-        <Button text="Previous" onClick={handleSubmit} />
-        <Button text="Next" disabled={!samplingCompleted} onClick={handleSubmit} />
+        <Button text="Previous" onClick={handlePrevious} />
+        <Button text="Next" disabled={!state.samplingCompleted} onClick={handleNext} />
       </div>
     </div>
   );

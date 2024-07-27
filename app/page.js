@@ -3,8 +3,10 @@
 import { useState } from "react";
 import DemographicForm from "@/app/_components/DemographicForm";
 import FavoriteDrinkForm from "@/app/_components/FavoriteDrinkForm";
-import  IntroductionStep  from "@/app/_components/IntroductionStep";
-import  InformationStep  from "@/app/_components/InformationStep";
+import IntroductionStep from "@/app/_components/IntroductionStep";
+import InformationStep from "@/app/_components/InformationStep";
+import FavoriteHolyBasilGummyForm from "./_components/FavoriteHolyBasil";
+import FavoriteAroniaForm from "./_components/FavoriteAronia";
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -43,11 +45,11 @@ export default function Home() {
 
   const handlePrev = (data) => {
     setCurrentStep(prevStep => prevStep - 1);
-    if(data) {
+    if (data) {
       setSurveyData(prevData => ({ ...prevData, ...data }));
     }
     window.scrollTo(0, 0);
-  }
+  };
 
   const handleSubmit = (data) => {
     const finalData = { ...surveyData, ...data };
@@ -58,7 +60,6 @@ export default function Home() {
     setCurrentStep(1);
     setSurveyData({});
     setAgreementChecked(false);
-    console.log(surveyData)
   };
 
   return (
@@ -75,15 +76,23 @@ export default function Home() {
         <InformationStep 
           texts={infoTexts} 
           benefitsList={benefitsList}
-          onNext={() => handleNext()}
+          onNext={handleNext}
+          onPrevious={handlePrev}
         />
       )}
       {currentStep === 3 && (
-        <DemographicForm onNext={handleNext} />
+        <DemographicForm onNext={handleNext} onPrevious={handlePrev} />
       )}
       {currentStep === 4 && (
-        <FavoriteDrinkForm onSubmit={handleSubmit} />
+        <FavoriteDrinkForm onNext={handleNext} onPrevious={handlePrev} />
+      )}
+      {currentStep === 5 && (
+        <FavoriteAroniaForm onNext={handleNext} onPrevious={handlePrev} />
+      )}
+      {currentStep === 6 && (
+        <FavoriteHolyBasilGummyForm onSubmit={handleSubmit} onPrevious={handlePrev} />
       )}
     </div>
+    
   );
 }

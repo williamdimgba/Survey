@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from "@/app/_components/Button";
 
-export default function FavoriteDrinkForm({ onSubmit }) {
+export default function FavoriteDrinkForm({ onSubmit, onNext, onPrevious }) {
   const [formData, setFormData] = useState({
     favoriteDrink: '',
     overallTaste: '',
@@ -17,7 +17,7 @@ export default function FavoriteDrinkForm({ onSubmit }) {
     additionalComments: ''
   });
 
-  const [errors, setErrors] = useState({}); // State to hold error messages
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +25,7 @@ export default function FavoriteDrinkForm({ onSubmit }) {
       ...prevState,
       [name]: value
     }));
-    setErrors(prevErrors => ({ ...prevErrors, [name]: '' })); // Clear error on change
+    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
   };
 
   const validateForm = () => {
@@ -43,33 +43,29 @@ export default function FavoriteDrinkForm({ onSubmit }) {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleNext = (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    if (Object.keys(validationErrors).length === 0) {
+      onNext(formData); // Proceed to the next step with the form data
     } else {
-      console.log('Favorite Drink Form data:', formData);
-      onSubmit(formData); // Proceed to submit the data
+      setErrors(validationErrors);
     }
   };
 
   return (
     <div className="mt-8">
-      <h2 className="text-2xl font-bold mb-6">II. Favorite Drink Questions</h2>
-      <form onSubmit={handleSubmit}>
+      <h2 className="text-2xl font-bold mb-6">Favorite Drink Questions</h2>
+      <form>
         <div className="mb-6">
           <label className="block mb-2 font-bold">Which of the drinks did you like the most?</label>
           <select name="favoriteDrink" value={formData.favoriteDrink} onChange={handleInputChange} className="w-full p-2 border rounded">
             <option value="">Select a drink</option>
             <option value="Raspberry">Raspberry</option>
-            <option value="Chamomile">Chamomile</option>
-            <option value="Earl Grey">Earl Grey</option>
-            <option value="Holy Basil and Fig">Holy Basil and Fig</option>
+            <option value="Fig">Fig</option>
             <option value="Original Aronia Drink">Original Aronia Drink</option>
             <option value="Strawberry">Strawberry</option>
-            <option value="Pomegranate">Pomegranate</option>
-            <option value="Peppermint">Peppermint</option>
+            <option value="Ginger lemon">Ginger lemon</option>
           </select>
           {errors.favoriteDrink && <p className="text-red-500">{errors.favoriteDrink}</p>}
         </div>
@@ -110,7 +106,7 @@ export default function FavoriteDrinkForm({ onSubmit }) {
           value={formData.sourness}
           onChange={handleInputChange}
           options={[
-            { value: '1', label: '1 - Not sour' },
+            { value: '1', label: '1 - Not sour enough' },
             { value: '2', label: '2' },
             { value: '3', label: '3 - Just right' },
             { value: '4', label: '4' },
@@ -135,7 +131,7 @@ export default function FavoriteDrinkForm({ onSubmit }) {
         {errors.bitterness && <p className="text-red-500">{errors.bitterness}</p>}
 
         <RatingQuestion
-          label="How would you rate the after-taste of your preferred drink?"
+          label="How would you rate the aftertaste of your preferred drink?"
           name="afterTaste"
           value={formData.afterTaste}
           onChange={handleInputChange}
@@ -174,15 +170,14 @@ export default function FavoriteDrinkForm({ onSubmit }) {
             <option value="None">None</option>
             <option value="Other">Other</option>
           </select>
-          {errors.preferredAdditive && <p className="text-red-500">{errors.preferredAdditive}</p>}
           {formData.preferredAdditive === 'Other' && (
-            <input
-              type="text"
-              name="otherAdditive"
-              value={formData.otherAdditive}
-              onChange={handleInputChange}
-              placeholder="Please specify"
-              className="mt-2 w-full p-2 border rounded"
+            <input 
+              type="text" 
+              name="otherAdditive" 
+              value={formData.otherAdditive} 
+              onChange={handleInputChange} 
+              placeholder="Please specify" 
+              className="w-full p-2 border rounded mt-2"
             />
           )}
         </div>
@@ -217,42 +212,35 @@ export default function FavoriteDrinkForm({ onSubmit }) {
 
         <div className="mb-6">
           <label className="block mb-2 font-bold">Is there anything else you would like to mention about your favorite drink or any of the others?</label>
-          <textarea
-            name="additionalComments"
-            value={formData.additionalComments}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded"
-            rows="4"
-          ></textarea>
+          <textarea name="additionalComments" value={formData.additionalComments} onChange={handleInputChange} className="w-full p-2 border rounded" rows="4"></textarea>
         </div>
 
-        <div className="flex justify-end">
-          <Button text="Submit Survey" onClick={handleSubmit} />
+        <div className="flex justify-between">
+          <Button onClick={onPrevious} disabled={false} text="Previous" />
+          <Button onClick={handleNext} text="Next" />
         </div>
       </form>
     </div>
   );
 }
 
-function RatingQuestion({ label, name, value, onChange, options }) {
-  return (
-    <div className="mb-6">
-      <label className="block mb-2 font-bold">{label}</label>
-      <div className="flex justify-between">
-        {options.map((option) => (
-          <label key={option.value} className="flex items-center">
-            <input
-              type="radio"
-              name={name}
-              value={option.value}
-              checked={value === option.value}
-              onChange={onChange}
-              className="mr-2"
-            />
-            {option.label}
-          </label>
-        ))}
-      </div>
+const RatingQuestion = ({ label, name, value, onChange, options }) => (
+  <div className="mb-6">
+    <label className="block mb-2 font-bold">{label}</label>
+    <div className="flex gap-4">
+      {options.map(option => (
+        <label key={option.value} className="flex items-center">
+          <input 
+            type="radio" 
+            name={name} 
+            value={option.value} 
+            checked={value === option.value} 
+            onChange={onChange} 
+            className="mr-2"
+          />
+          {option.label}
+        </label>
+      ))}
     </div>
-  );
-}
+  </div>
+);
