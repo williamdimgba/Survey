@@ -52,6 +52,7 @@ export default function IntroductionStep({ texts, agreementChecked, setAgreement
           />
         </div>
       </div>
+      <p  className="mb-4 font-bold">Hello, and welcome!</p>
       <TextSection texts={texts} />
       <div className="flex items-start mb-6">
         <input
