@@ -42,23 +42,47 @@ export default function Page() {
     // Define colors for the charts
     const colors = {
         demographic: 'rgba(255, 99, 132, 0.6)',
-        favoriteDrink: 'rgba(54, 162, 235, 0.6)',
+        favoriteDrink: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 159, 64, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(153, 102, 255, 0.6)'],
         informationStep: 'rgba(255, 206, 86, 0.6)',
-        holyBasil: 'rgba(75, 192, 192, 0.6)',
+        holyBasil: ['rgba(75, 192, 192, 0.6)', 'rgba(153, 102, 255, 0.6)', 'rgba(255, 159, 64, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 99, 132, 0.6)'],
         aronia: 'rgba(153, 102, 255, 0.6)',
     };
 
     const prepareChartData = (data, label, color) => {
+        const labels = Object.keys(data || {});
+        const values = Object.values(data || {});
+        const backgroundColor = Array.isArray(color) ? color : new Array(labels.length).fill(color);
+
         return {
-            labels: Object.keys(data || {}),
+            labels: labels,
             datasets: [
                 {
                     label: label,
-                    data: Object.values(data || {}),
-                    backgroundColor: color,
+                    data: values,
+                    backgroundColor: backgroundColor,
+                    borderColor: color,
+                    borderWidth: 1,
                 },
             ],
         };
+    };
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            tooltip: {
+                callbacks: {
+                    label: (context) => {
+                        const label = context.dataset.label || '';
+                        const value = context.raw;
+                        return `${label}: ${value}`;
+                    },
+                },
+            },
+        },
     };
 
     return (
@@ -90,6 +114,7 @@ export default function Page() {
                 {favoriteDrinkFormData ? (
                     <Pie
                         data={prepareChartData(favoriteDrinkFormData, 'Favorite Drink Data', colors.favoriteDrink)}
+                        options={chartOptions}
                     />
                 ) : (
                     <p className="text-gray-500">No favorite drink form data found.</p>
@@ -101,6 +126,7 @@ export default function Page() {
                 {informationStepData ? (
                     <Bar
                         data={prepareChartData(informationStepData, 'Information Step Data', colors.informationStep)}
+                        options={chartOptions}
                     />
                 ) : (
                     <p className="text-gray-500">No information step data found.</p>
@@ -112,6 +138,7 @@ export default function Page() {
                 {favoriteHolyBasilGummyForm ? (
                     <Pie
                         data={prepareChartData(favoriteHolyBasilGummyForm, 'Favorite Holy Basil Gummy Data', colors.holyBasil)}
+                        options={chartOptions}
                     />
                 ) : (
                     <p className="text-gray-500">No favorite Holy Basil gummy form data found.</p>
@@ -123,6 +150,7 @@ export default function Page() {
                 {favoriteAroniaFormData ? (
                     <Line
                         data={prepareChartData(favoriteAroniaFormData, 'Favorite Aronia Form Data', colors.aronia)}
+                        options={chartOptions}
                     />
                 ) : (
                     <p className="text-gray-500">No favorite Aronia form data found.</p>
