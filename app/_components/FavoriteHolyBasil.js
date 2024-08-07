@@ -1,5 +1,7 @@
+"use client";
 import React, { useState } from 'react';
 import Button from "@/app/_components/Button";
+import { useRouter } from 'next/navigation';
 
 export default function FavoriteHolyBasilGummyForm({ onPrevious }) {
   const [formData, setFormData] = useState({
@@ -17,6 +19,7 @@ export default function FavoriteHolyBasilGummyForm({ onPrevious }) {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false); // State to handle submission status
+  const router = useRouter();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,28 +44,35 @@ export default function FavoriteHolyBasilGummyForm({ onPrevious }) {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      setIsSubmitting(true); // Set submitting state to true
+      setIsSubmitting(true);
       try {
         // Log the form data to the console
         console.log('Form data:', formData);
 
+        // Save the form data to localStorage
+        localStorage.setItem('favoriteHolyBasilGummyForm', JSON.stringify(formData));
+
         // Handle successful form submission
         alert('Form submitted successfully!');
+        
+        // Redirect to /admin page
+        router.push('/admin');
       } catch (error) {
         console.error('Error handling form:', error);
-        // Handle errors if needed
         alert('There was a problem processing the form. Please try again.');
       } finally {
-        setIsSubmitting(false); // Set submitting state back to false
+        setIsSubmitting(false);
       }
     }
   };
+
+
 
   const handlePrevious = () => {
     onPrevious(formData);
@@ -250,6 +260,7 @@ export default function FavoriteHolyBasilGummyForm({ onPrevious }) {
           <Button text={isSubmitting ? "Submitting..." : "Submit"} type="submit" disabled={isSubmitting} />
         </div>
       </form>
+
     </div>
   );
 }

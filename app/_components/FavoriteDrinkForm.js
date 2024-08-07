@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from "@/app/_components/Button";
 
+
 export default function FavoriteDrinkForm({ onSubmit, onNext, onPrevious }) {
   const [formData, setFormData] = useState({
     favoriteDrink: '',
@@ -47,6 +48,9 @@ export default function FavoriteDrinkForm({ onSubmit, onNext, onPrevious }) {
     e.preventDefault();
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length === 0) {
+      // Save the form data to localStorage
+      localStorage.setItem('favoriteDrinkFormData', JSON.stringify(formData));
+      
       onNext(formData); // Proceed to the next step with the form data
     } else {
       setErrors(validationErrors);

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from "@/app/_components/Button";
 import TextSection from './TextSection';
+
 
 export default function InformationStep({ texts, benefitsList, onNext, onPrevious }) {
   const [state, setState] = useState({
@@ -8,7 +9,7 @@ export default function InformationStep({ texts, benefitsList, onNext, onPreviou
     familiarDrinks: [],
     otherDrink: '',
   });
-  
+
   const handleCheckboxChange = (drink) => {
     setState(prevState => ({
       ...prevState,
@@ -32,8 +33,11 @@ export default function InformationStep({ texts, benefitsList, onNext, onPreviou
     }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (state.samplingCompleted) {
+      // Save state to local storage
+      localStorage.setItem('informationStepData', JSON.stringify(state));
+      
       console.log('Final state before submission:', state);
       onNext(state); // Pass the state to the next step
     }
