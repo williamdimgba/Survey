@@ -40,6 +40,10 @@ export default function DemographicForm({ onNext }) {
       setErrors(validationErrors);
     } else {
       console.log('Demographic Form data:', formData);
+      
+      // Save the form data to localStorage
+      localStorage.setItem('demographicFormData', JSON.stringify(formData));
+      
       onNext(formData); // Proceed to the next step
     }
   };
@@ -49,8 +53,15 @@ export default function DemographicForm({ onNext }) {
       <h2 className="text-2xl font-bold mb-6">II. Demographic Information</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
-          <label className="block mb-2 font-bold">Gender</label>
-          <select name="gender" value={formData.gender} onChange={handleInputChange} className="w-full p-2 border rounded">
+          <label className="block mb-2 font-bold" htmlFor="gender">Gender</label>
+          <select
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            aria-required="true"
+          >
             <option value="">Select gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -61,8 +72,15 @@ export default function DemographicForm({ onNext }) {
         </div>
 
         <div className="mb-6">
-          <label className="block mb-2 font-bold">Age</label>
-          <select name="age" value={formData.age} onChange={handleInputChange} className="w-full p-2 border rounded">
+          <label className="block mb-2 font-bold" htmlFor="age">Age</label>
+          <select
+            id="age"
+            name="age"
+            value={formData.age}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            aria-required="true"
+          >
             <option value="">Select age range</option>
             <option value="12-17">12 - 17</option>
             <option value="18-24">18 - 24</option>
@@ -76,8 +94,15 @@ export default function DemographicForm({ onNext }) {
         </div>
 
         <div className="mb-6">
-          <label className="block mb-2 font-bold">Ethnicity</label>
-          <select name="ethnicity" value={formData.ethnicity} onChange={handleInputChange} className="w-full p-2 border rounded">
+          <label className="block mb-2 font-bold" htmlFor="ethnicity">Ethnicity</label>
+          <select
+            id="ethnicity"
+            name="ethnicity"
+            value={formData.ethnicity}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            aria-required="true"
+          >
             <option value="">Select ethnicity</option>
             <option value="caucasian">Caucasian</option>
             <option value="hispanic">Hispanic or Latino</option>
@@ -100,8 +125,15 @@ export default function DemographicForm({ onNext }) {
         </div>
 
         <div className="mb-6">
-          <label className="block mb-2 font-bold">Education</label>
-          <select name="education" value={formData.education} onChange={handleInputChange} className="w-full p-2 border rounded">
+          <label className="block mb-2 font-bold" htmlFor="education">Education</label>
+          <select
+            id="education"
+            name="education"
+            value={formData.education}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            aria-required="true"
+          >
             <option value="">Select education level</option>
             <option value="no_schooling">No schooling completed</option>
             <option value="nursery_to_8">Nursery school to 8th grade</option>
@@ -119,8 +151,15 @@ export default function DemographicForm({ onNext }) {
         </div>
 
         <div className="mb-6">
-          <label className="block mb-2 font-bold">Field of Study/Work</label>
-          <select name="fieldOfStudy" value={formData.fieldOfStudy} onChange={handleInputChange} className="w-full p-2 border rounded">
+          <label className="block mb-2 font-bold" htmlFor="fieldOfStudy">Field of Study/Work</label>
+          <select
+            id="fieldOfStudy"
+            name="fieldOfStudy"
+            value={formData.fieldOfStudy}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded"
+            aria-required="true"
+          >
             <option value="">Select field</option>
             <option value="agriculture">Agriculture/farming</option>
             <option value="science">Science</option>

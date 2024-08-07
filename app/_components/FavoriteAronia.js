@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from "@/app/_components/Button";
 
+
 export default function FavoriteAroniaGummyForm({ onNext, onPrevious }) {
   const [formData, setFormData] = useState({
     favoriteGummy: '',
@@ -47,9 +48,14 @@ export default function FavoriteAroniaGummyForm({ onNext, onPrevious }) {
       setErrors(validationErrors);
     } else {
       console.log('Favorite Aronia Gummy Form data:', formData);
+      
+      // Save the form data to localStorage
+      localStorage.setItem('favoriteAroniaFormData', JSON.stringify(formData));
+      
       onNext(formData); // Call onNext to proceed to the next step
     }
   };
+  
 
   const handlePrevious = () => {
     onPrevious(formData);
